@@ -1,6 +1,9 @@
 # Advance_Programming 
 This is a course at Universidad Distrital Francisco José de Caldas. In this repository you will find useful resources such as source code, exercises, wokrshops, projects and other study materials.
 
+The course [Advance Programming](https://github.com/EngAndres/ud-public/tree/main/courses/advanced-programming) has the main objective to create a monolith project, based in a real modelling App, simulating some of the features and develop a functional App.
+
+
 Course Description
  ------------
 Advance Programming is a course focused on teach the more specialize and complex concepts about techniques on programming, design of the projects following the instructions to create a UML Diagrams. Also related to:
