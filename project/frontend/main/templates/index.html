@@ -1,10 +1,13 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notas - Inicia Sesión</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+    <script src="{% static 'scripts.js' %}"></script>
 </head>
 <body>
     <div class="container">
@@ -22,7 +25,5 @@
             <p>¿No tienes una cuenta? <a href="#" id="register-link">Regístrate aquí</a></p>
         </div>
     </div>
-
-    <script src="scripts.js"></script>
 </body>
 </html>
