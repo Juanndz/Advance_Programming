@@ -40,7 +40,7 @@ def remove_workspace(user: User, workspace: Workspace):
     user.remove_workspace(workspace)
 
 
-@app.get("/user/viewWorkspaces")
+@app.post("/user/viewWorkspaces")
 def view_workspaces(user: User):
     """this service is used to view all the workspaces of the user"""
     return user.view_workspaces()
@@ -100,7 +100,7 @@ def remove_user(workspace: Workspace, user: User):
     user.remove_workspace(workspace)
 
 
-@app.get("/workspace/viewUsers")
+@app.post("/workspace/viewUsers")
 def view_users(workspace: Workspace):
     """this service is used to view all the users in the workspace"""
     return workspace.view_users()
@@ -121,13 +121,13 @@ def delete_note(note: Note, workspace: Workspace):
     Workspace.delete_note(workspace, note)
 
 
-@app.get("/workspace/viewNotes")
+@app.post("/workspace/viewNotes")
 def view_notes(workspace: Workspace):
     """this service is used to view all the notes in the workspace"""
     return workspace.view_notes()
 
 
-@app.get("/workspace/viewNote")
+@app.post("/workspace/viewNote")
 def view_note(note: Note):
     """this service is used to view a note"""
     return note.view_note()
