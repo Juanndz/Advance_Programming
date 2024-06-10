@@ -4,6 +4,8 @@ from .db_connection import PostgresConnection
 from dotenv import load_dotenv
 import os
 
+#author: Angel Diaz
+
 class Note(BaseModel):
     """
     this class represents a note
