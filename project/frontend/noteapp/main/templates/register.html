@@ -27,9 +27,9 @@
                 <label for="confirm-password">Confirmar Contraseña:</label>
                 <input type="password" id="confirm-password" name="confirm-password" required>
 
-                <button type="submit" onclick="register()">Registrarse</button>
+                <button type="submit" onclick="register(event)">Registrarse</button>
             </form>
-            <p>¿Ya tienes una cuenta? <a href="{% url 'index' %}">Inicia Sesión aquí</a></p>
+            <p>¿Ya tienes una cuenta? <a href="{% url 'login' %}">Inicia Sesión aquí</a></p>
         </div>
     </div>
 
