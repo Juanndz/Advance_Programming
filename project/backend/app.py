@@ -53,6 +53,9 @@ def view_workspaces(user: User):
 def create_workspace(workspace: Workspace):
     """this service is used to create a workspace"""
     w_id = Workspace.create_workspace(workspace.name, workspace.creator)
+
+    print(w_id)
+
     user = User(
         id=workspace.creator["id"],
         name=workspace.creator["name"],
@@ -61,6 +64,7 @@ def create_workspace(workspace: Workspace):
         list_workspaces=[],
     )
     workspace.id = w_id
+    print(workspace, workspace.id)
     user.add_workspace(user, workspace)
     return "Workspace created successfully"
 

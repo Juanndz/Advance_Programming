@@ -79,7 +79,7 @@ async function register(event) {
         });
 
     alert("Registro exitoso. Redirigiendo a la página de inicio de sesión...");
-    window.location.href = 'index'; // Redirige a la página de inicio de sesión
+    window.location.href = "{% url 'login' %}";
 
     } catch (error) {
         console.error('Error:', error);

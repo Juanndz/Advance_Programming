@@ -87,6 +87,7 @@ async function createWorkspace() {
         let userId = document.getElementById('userid').value;
         let userName = document.getElementById('username').value;
         let workspaceId = localStorage.getItem('workspaceId');
+        let workspaceName = localStorage.getItem('workspaceName');
         let url_post = URL_BASE + '/workspace/addUser';
 
         try {
@@ -100,7 +101,7 @@ async function createWorkspace() {
                 body: JSON.stringify({
                     workspace: {
                       id: workspaceId,
-                      name: "",
+                      name: workspaceName,
                       creator: {},
                       list_users: [],
                       list_notes: []
@@ -116,16 +117,17 @@ async function createWorkspace() {
                     }
                   })
             });
-            const workspace = await response.json();
-            document.getElementById('workspace-content').textContent = workspace.message;
+            alert("Usuario agregado exitosamente");
         } catch (error) {
             console.error('Error:', error);
+            alert("Error al agregar el usuario");
         }
     }
 
-    async function deleteUserfromWorkspace(userId) {
+    async function deleteUserfromWorkspace(userId, userName) {
     
     let workspaceId = localStorage.getItem('workspaceId');
+    let workspaceName = localStorage.getItem('workspaceName');
     let url_post = URL_BASE + '/workspace/removeUser';
     
 
@@ -140,14 +142,14 @@ async function createWorkspace() {
             body: JSON.stringify({
                 workspace: {
                   id: workspaceId,
-                  name: "",
+                  name: workspaceName,
                   creator: {},
                   list_users: [],
                   list_notes: []
                 },
                 user: {
                   id: userId,
-                  name: "",
+                  name: userName,
                   email: "",
                   password: "",
                   list_workspaces: [
@@ -368,15 +370,16 @@ async function editNote(noteId, noteTitle) {
     table += "<tr><th>Workspace</th><th>acceder</th></tr><tr><th>eliminar</th></tr>";
 
     data.forEach(workspace => {
-        table += "<tr><td>" + workspace.name + "</td><td><button onclick='accessworkspace("+ workspace.id +")'>Acceder</button></td></tr><td><button onclick='deleteWorkspace("+ workspace.id +")'>Eliminar</button></td></tr>";
+        table += "<tr><td>" + workspace.name + "</td><td><button onclick='accessworkspace("+ workspace.id  + ", `" + workspace.name + "` )'>Acceder</button></td></tr><td><button onclick='deleteWorkspace("+ workspace.id +")'>Eliminar</button></td></tr>";
     });
     table += "</table>";
 
     document.getElementById('workspace-content').innerHTML = table;
 
  }
-  async function accessworkspace(id){
+  async function accessworkspace(id, name){
     localStorage.setItem('workspaceId', id);
+    localStorage.setItem('workspaceName', name);
     
            workspaceOptions = "<div class='option1'>";
            workspaceOptions += "<button id='administrateUsers' onclick='manageUsers()'>Administrar Usuarios</button>"; 
@@ -432,7 +435,7 @@ async function viewUsers(){
     table += "<tr><th>Nombre</th><th>Eliminar</th></tr>";
 
     data.forEach(user => {
-        table += "<tr><td>" + user.name + "</td><td><button onclick='deleteUserfromWorkspace("+ user.id + ")'>Eliminar</button></td></tr>";
+        table += "<tr><td>" + user.name + "</td><td><button onclick='deleteUserfromWorkspace("+ user.id +  ", `" + user.name + "` )'>Eliminar</button></td></tr>";
     });
     table += "</table>";
 
