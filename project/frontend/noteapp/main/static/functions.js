@@ -66,7 +66,8 @@ async function createWorkspace() {
                 list_notes: [""]
               })
         });
-        }
+        alert("Workspace eliminado exitosamente");
+    }
     }
 
     async function addnote() {
@@ -161,7 +162,7 @@ async function createWorkspace() {
         alert("Usuario eliminado exitosamente");
     } catch (error) {
         console.error('Error:', error);
-    
+        alert("Error al eliminar el usuario");
        }   }
 }
 
@@ -170,10 +171,6 @@ async function addNoteToWorkspace() {
     titleNote = document.getElementById('titleNote').value;
     noteText = document.getElementById('noteText').value;
     w_id = localStorage.getItem('workspaceId');
-
-    console.log(titleNote);
-    console.log(noteText);
-    console.log(w_id);
 
     let url_post = URL_BASE + '/workspace/createNote'
 
@@ -205,6 +202,7 @@ async function addNoteToWorkspace() {
         alert("Nota agregada exitosamente");
     } catch (error) {
         console.error('Error:', error);
+        alert("Error al agregar la nota");
 }
 }
 
@@ -239,6 +237,7 @@ async function deleteNoteFromWorkspace(noteId, noteTitle) {
         alert("Nota eliminada exitosamente");
     } catch (error) {
         console.error('Error:', error);
+        alert("Error al eliminar la nota");
     }
     }
 
@@ -249,6 +248,8 @@ async function viewNotes(){
         
         let workspaceId = localStorage.getItem('workspaceId');
 
+
+        try {
         response = await fetch(url_post, {
             method: 'POST',
             headers: {
@@ -266,8 +267,9 @@ async function viewNotes(){
             })
         });
         data = await response.json();
-        console.log(data);
 
+        if(data != {}){
+        
         let table = "<table>";
         table += "<tr><th>Titulo</th><th>Editar</th><th>eliminar</th></tr>";
 
@@ -277,7 +279,13 @@ async function viewNotes(){
         table += "</table>";
 
         document.getElementById('notes-content').innerHTML = table;
-
+        }else{
+            alert("No hay notas en este workspace");
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert("Error al cargar las notas");
+    }
 }
 
 async function editNoteForm(noteId, noteTitle){
@@ -340,6 +348,7 @@ async function editNote(noteId, noteTitle) {
     }
     catch (error) {
         console.error('Error:', error);
+        alert("Error al editar la nota");
     }
 
 }
@@ -366,6 +375,7 @@ async function editNote(noteId, noteTitle) {
 
     console.log(data);
 
+    if(data != {}){
     let table = "<table>";
     table += "<tr><th>Workspace</th><th>acceder</th><th>eliminar</th></tr>";
 
@@ -375,6 +385,9 @@ async function editNote(noteId, noteTitle) {
     table += "</table>";
 
     document.getElementById('workspace-content').innerHTML = table;
+    } else {
+        alert("No hay workspaces disponibles");
+    }
 
  }
   async function accessworkspace(id, name){
