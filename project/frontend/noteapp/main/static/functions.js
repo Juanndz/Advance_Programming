@@ -367,10 +367,10 @@ async function editNote(noteId, noteTitle) {
     console.log(data);
 
     let table = "<table>";
-    table += "<tr><th>Workspace</th><th>acceder</th></tr><tr><th>eliminar</th></tr>";
+    table += "<tr><th>Workspace</th><th>acceder</th><th>eliminar</th></tr>";
 
     data.forEach(workspace => {
-        table += "<tr><td>" + workspace.name + "</td><td><button onclick='accessworkspace("+ workspace.id  + ", `" + workspace.name + "` )'>Acceder</button></td></tr><td><button onclick='deleteWorkspace("+ workspace.id +")'>Eliminar</button></td></tr>";
+        table += "<tr><td>" + workspace.name + "</td><td><button onclick='accessworkspace("+ workspace.id  + ", `" + workspace.name + "` )'>Acceder</button></td><td><button onclick='deleteWorkspace("+ workspace.id +")'>Eliminar</button></td></tr>";
     });
     table += "</table>";
 
