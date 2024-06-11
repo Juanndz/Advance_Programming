@@ -1,1 +1,31 @@
+{% load static %}
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notas - Workspaces</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <script src="{% static 'functions.js' %} "></script>
+</head>
+<body>
+    <div class="container">
+        <div class="workspaces-container">
+            <h1>Mis Workspaces</h1>
+            <div class="logout">
+                <a href="#" id="logout-link">Cerrar Sesión</a>
+            </div>
+            <div class="actions">
+                <button id="create-workspace" onclick="createWorkspace()">Crear Workspace</button>
+                <button id="view-workspaces" onclick="seeWorkspaces()">Ver Workspaces</button>
+                <button id="delete-workspace"onclick="deleteWorkspaces()">Eliminar Workspace</button>
+            </div>
+            <div id="workspace-content">
+                <!-- Aquí se mostrará el contenido dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
