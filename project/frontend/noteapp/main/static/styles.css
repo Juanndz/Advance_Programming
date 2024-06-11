@@ -22,7 +22,7 @@ body {
 
 .login-container h1 {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
 }
 
 form {
@@ -111,3 +111,25 @@ button + button {
 
 /*Botones de Crear Workspace*/
 
+.option1,
+.option2 {
+    display: flex;
+    align-items: center; /* Alinear elementos verticalmente */
+    justify-content: space-between; /* Espacio igual entre los elementos */
+    margin-bottom: 10px; /* Espacio entre las opciones */
+}
+
+.option1 label,
+.option2 label {
+    margin-right: 10px; /* Espacio entre el label y el input */
+}
+
+.option1 input,
+.option2 textarea {
+    flex-grow: 1; /* Hacer que los inputs ocupen todo el espacio restante */
+}
+
+.option1 button,
+.option2 button {
+    width: 150px; /* Ancho fijo para los botones */
+}

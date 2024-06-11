@@ -35,8 +35,8 @@ let URL_BASE = "http://localhost:8080"
                 },
                 body: JSON.stringify(data)
             });
-            const result = await response.json();
-            document.getElementById('result').textContent = result.message;
+            const workspace = await response.json();
+            document.getElementById('workspace-content').textContent = workspace.message;
         } catch (error) {
             console.error('Error:', error);
     }
@@ -62,8 +62,8 @@ async function addNoteToWorkspace() {
             },
             body: JSON.stringify(data)
         });
-        const result = await response.json();
-        document.getElementById('result').textContent = result.message;
+        const workspace = await response.json();
+        document.getElementById('workspace-content').textContent = workspace.message;
     } catch (error) {
         console.error('Error:', error);
 }
@@ -76,22 +76,17 @@ async function addNoteToWorkspace() {
             const response = await fetch(URL_BASE + '/workspaces');
             const data = await response.json();
             
-            let table = '<table>';
-            table += '<tr><th>Name</th></tr>';
+            let workspaceList = "<ul>";
+        // Iterate over the workspaces and create list items
+        workspaces.forEach(workspace => {
+            workspaceList += "<li>" + workspace.name + "</li>";
+        });
             
-            data.forEach(item => {
-                table += `<tr><td>${item.Title}</td></tr>`;
-            });
             
-            table += '</table>';
-            
-            document.getElementById('result').innerHTML = table;
+            document.getElementById('').innerHTML = table;
         } catch (error) {
             console.error('Error:', error);
         }
-        
-        
-        
         let workspaces = await fetch(URL_BASE + '/workspaces', {
             method: 'GET',
             headers: {
@@ -99,16 +94,30 @@ async function addNoteToWorkspace() {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             }
         });
+    }
+/// Delete a workspaces
 
-
-        workspaces = await workspaces.json();
-        // Create a list element to display the workspaces
-        let workspaceList = "<ul>";
-        // Iterate over the workspaces and create list items
-        workspaces.forEach(workspace => {
-            workspaceList += "<li>" + workspace.name + "</li>";
-        });
-        workspaceList += "</ul>";
-        // Display the list in the workspace-content element
-        document.getElementById('workspace-content').innerHTML = workspaceList;
+    async function deleteWorkspace() {
+        let data = {
+            workspace: document.getElementById('workspaceName').value
+        }
+        console.log(data)
+        
+        let url_post = URL_BASE + '/workspaces/delete'
+    
+        try {
+            const response = await fetch(url_post, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': 'http://localhost:5500',
+                    "Access-Control-Allow-Methods": "POST"
+                },
+                body: JSON.stringify(data)
+            });
+            const workspace = await response.json();
+            document.getElementById('workspace-content').textContent = workspace.message;
+        } catch (error) {
+            console.error('Error:', error);
+    }
     }
