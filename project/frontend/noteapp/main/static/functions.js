@@ -3,7 +3,70 @@
 let URL_BASE = "http://localhost:8080"
 
 // Create a new workspace and at the time add a user to it and add a note
-    async function createWorkspace() {
+async function createWorkspacebtn(event){
+    let crateworkspaceform = "<div class='option1'>";
+    crateworkspaceform += "<label for='workspaceName'>Nombre del Workspace:</label>";
+    crateworkspaceform += "<input type='text' id='workspaceName' placeholder='Nombre del workspace'>";
+    crateworkspaceform += "<button id='createWorkspaceBtn' onclick='createWorkspace()'>Crear Workspace</button></div>";
+
+    document.getElementById('workspace-content').innerHTML = crateworkspaceform;
+
+}
+
+async function createWorkspace() {
+    let workspaceName = document.getElementById('workspaceName').value;
+    let userId = localStorage.getItem('userId');
+    let userName = localStorage.getItem('userName');
+
+    let url_post = URL_BASE + '/createWorkspace';
+
+    response = await fetch(url_post, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },body: JSON.stringify({
+                id: 0,
+                name: workspaceName,
+                "creator": { 
+                    "id": userId,
+                    "name": userName
+                  },
+                "list_users": [],
+                "list_notes": []
+        })
+    });
+
+}
+
+    async function deleteWorkspace(event){
+        event.preventDefault();
+        let url_post = URL_BASE + '/deleteWorkspace';
+
+        let workspaceId = localStorage.getItem('workspaceId');
+
+        response = await fetch(url_post, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },body: JSON.stringify({
+                id: workspaceId,
+                name: "",
+                creator: {},
+                list_users: [
+                    "string"
+                ],
+                list_notes: [
+                    "string"
+                ]
+            })
+        });
+    
+    }
+
+
+
+
+    async function addnote() {
         let userOptions = "<div class='option1'>";
                 userOptions += "<label for='userEmail'>Agregar Usuario (Correo):</label>";
                 userOptions += "<input type='email' id='userEmail' placeholder='Correo del usuario'>";
@@ -18,13 +81,10 @@ let URL_BASE = "http://localhost:8080"
     }
 // Add a user to the workspace
     async function addUserToWorkspace() {
-        let data = {
-            user: document.getElementById('userEmail').value
-        }
-        console.log(data)
-        
-        let url_post = URL_BASE + '/workspaces/add-user'
-    
+        let userEmail = document.getElementById('userEmail').value;
+        let workspaceId = localStorage.getItem('workspaceId');
+        let url_post = URL_BASE + '/workspaces/add-user';
+
         try {
             const response = await fetch(url_post, {
                 method: 'POST',
@@ -33,32 +93,59 @@ let URL_BASE = "http://localhost:8080"
                     'Access-Control-Allow-Origin': 'http://localhost:5500',
                     "Access-Control-Allow-Methods": "POST"
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify({
+                    workspace: {
+                      id: workspaceId,
+                      name: workspaceName,
+                      creator: {},
+                      list_users: [],
+                      list_notes: []
+                    },
+                    user: {
+                      id: userId,
+                      name: userName,
+                      email: "string",
+                      password: "string",
+                      list_workspaces: [
+                        {}
+                      ]
+                    }
+                  })
             });
             const result = await response.json();
             document.getElementById('result').textContent = result.message;
         } catch (error) {
             console.error('Error:', error);
+        }
     }
-    }
-// Add a note to the workspace
 
 async function addNoteToWorkspace() {
     let data = {
-        Title: document.getElementById('titleNote').value,
-        Description: document.getElementById('noteText').value
-    }
-    console.log(data)
+        note: {
+          id: 0,
+          title: Document.getElementById('titleNote').value,
+          content: Document.getElementById('noteText').value
+        },
+        workspace: {
+          id: workspaceId,
+          name: workspaceName,
+          creator: {},
+          list_users: [
+            "string"
+          ],
+          "list_notes": [
+            "string"
+          ]
+        }
+      }
     
-    let url_post = URL_BASE + '/workspaces/add-note'
+    let url_post = URL_BASE + '/workspaces/addNote'
 
     try {
         const response = await fetch(url_post, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': 'http://localhost:5500',
-                "Access-Control-Allow-Methods": "POST"
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
         });
@@ -68,47 +155,36 @@ async function addNoteToWorkspace() {
         console.error('Error:', error);
 }
 }
+
+ async function viewWorkspaces(event){
+    event.preventDefault();
+    let url_post = URL_BASE + '/viewWorkspaces';
+
+    let userId = localStorage.getItem('userId');
+    let userName = localStorage.getItem('userName');
+
+    response = await fetch(url_post, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },body: JSON.stringify({
+            id: userId,
+            name: userName,
+            email: "",
+            password: "",
+            list_workspaces: []
+        })
+    });
+    data = await response.json();
+    let table = "<table>";
+    table += "<tr><th>Workspace</th><th>acceder</th></tr>";
+
+    data.forEach(workspace => {
+        table += "<tr><td>" + workspace.name + "</td><td><button onclick='viewNotes'>Acceder</button></td></tr>";
+    });
+    table += "</table>";
+
+    document.getElementById('workspace-content').innerHTML = table;
+
+ }
    
-/// Get the list of workspaces
-    async function seeWorkspaces() {
-        // Connect to the database and retrieve the list of workspaces
-        try {
-            const response = await fetch(URL_BASE + '/workspaces');
-            const data = await response.json();
-            
-            let table = '<table>';
-            table += '<tr><th>Name</th></tr>';
-            
-            data.forEach(item => {
-                table += `<tr><td>${item.Title}</td></tr>`;
-            });
-            
-            table += '</table>';
-            
-            document.getElementById('result').innerHTML = table;
-        } catch (error) {
-            console.error('Error:', error);
-        }
-        
-        
-        
-        let workspaces = await fetch(URL_BASE + '/workspaces', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            }
-        });
-
-
-        workspaces = await workspaces.json();
-        // Create a list element to display the workspaces
-        let workspaceList = "<ul>";
-        // Iterate over the workspaces and create list items
-        workspaces.forEach(workspace => {
-            workspaceList += "<li>" + workspace.name + "</li>";
-        });
-        workspaceList += "</ul>";
-        // Display the list in the workspace-content element
-        document.getElementById('workspace-content').innerHTML = workspaceList;
-    }
