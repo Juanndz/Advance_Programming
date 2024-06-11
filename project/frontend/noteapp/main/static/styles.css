@@ -1,5 +1,6 @@
-/* This file apply the design to the pages */
-/* Here is the design of the page index.html */
+/* Here is the design for the file workspaces.html */
+/* author : Juan Zárate */
+
 body {
     font-family: Arial, sans-serif;
     display: flex;
@@ -9,7 +10,7 @@ body {
     margin: 0;
     background-color: #f0f0f0;
 }
-/*Part where is the LogIn information*/
+
 .container {
     background-color: white;
     padding: 20px;
@@ -18,26 +19,17 @@ body {
     width: 300px;
 }
 
-.login-container h1 {
+.workspaces-container h1 {
     text-align: center;
     margin-bottom: 20px;
 }
 
-form {
+.actions {
     display: flex;
-    flex-direction: column;
+    justify-content: space-around;
+    margin-bottom: 20px;
 }
-
-label {
-    margin-bottom: 5px;
-}
-
-input {
-    margin-bottom: 15px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
+/*Crear - Ver - Eliminar buttons*/
 
 button {
     padding: 10px;
@@ -46,52 +38,17 @@ button {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    width: 100px;
 }
 
 button:hover {
     background-color: #45a049;
 }
 
-p {
-    text-align: center;
-}
-
-a {
-    color: #4CAF50;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-/*Here is the design for the file workspaces.html */
-
-/*general content*/
-.workspaces-container {
-    text-align: center;
-}
-
-.actions {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-}
-
-/*Crear - Ver - Eliminar buttons*/
-button {
-    width: 100px;
-}
-
 button + button {
     margin-left: 10px;
 }
 
-#workspace-content {
-    margin-top: 20px;
-}
-
-/*Cerrar Sesión button*/
 .logout {
     text-align: right;
     margin-bottom: 20px;
@@ -105,5 +62,30 @@ button + button {
 
 .logout a:hover {
     text-decoration: underline;
+}
+
+#workspace-content .option {
+    margin-top: 20px;
+}
+
+#workspace-content label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+#workspace-content input[type="email"],
+#workspace-content textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+#workspace-content textarea {
+    height: 100px;
+    resize: vertical;
 }
 
