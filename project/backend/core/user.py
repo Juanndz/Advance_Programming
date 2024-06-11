@@ -36,7 +36,7 @@ class User(BaseModel):
     list_workspaces: list | None = None
 
     @staticmethod
-    def login(email_: str, password_: str) -> bool:
+    def login(name_: str, email_: str, password_: str) -> int:
         """
         this method is used to login the user
         parameters:
@@ -47,9 +47,9 @@ class User(BaseModel):
 
         """
         for user in User.get_users():
-            if user.email == email_ and user.password == password_:
-                return True
-        return False
+            if user.email == email_ and user.password == password_ and user.name == name_:
+                return user.id
+        return -1
 
     @staticmethod
     def get_users() -> List["User"]:

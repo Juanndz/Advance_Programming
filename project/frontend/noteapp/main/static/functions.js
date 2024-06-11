@@ -69,22 +69,22 @@ async function createWorkspace() {
 
     async function addnote() {
         let userOptions = "<div class='option1'>";
-                userOptions += "<label for='userEmail'>Agregar Usuario (Correo):</label>";
+                /*userOptions += "<label for='userEmail'>Agregar Usuario (Correo):</label>";
                 userOptions += "<input type='email' id='userEmail' placeholder='Correo del usuario'>";
                 userOptions += "<button id='addUserBtn' onclick='addUserToWorkspace()'>Agregar Usuario</button> </div>";
-                userOptions += "<div class='option2'>";
+                userOptions += "<div class='option2'>";*/
                 userOptions += "<label for='noteText'>Agregar Nota:</label>";
                 userOptions += "<textarea id='titleNote' placeholder='Escribe el título de tu nota'></textarea>";
                 userOptions += "<textarea id='noteText' placeholder='Escribe tu nota aquí'></textarea>";
                 userOptions += "<button id='addNoteBtn' onclick='addNoteToWorkspace()'>Agregar Nota</button></div>";
 
-                document.getElementById('workspace-content').innerHTML = userOptions;
+                document.getElementById('notes-content').innerHTML = userOptions;
     }
 // Add a user to the workspace
     async function addUserToWorkspace() {
         let userEmail = document.getElementById('userEmail').value;
         let workspaceId = localStorage.getItem('workspaceId');
-        let url_post = URL_BASE + '/workspaces/add-user';
+        let url_post = URL_BASE + '/workspace/addUser';
 
         try {
             const response = await fetch(url_post, {
@@ -124,7 +124,7 @@ async function createWorkspace() {
     
     let userEmail = document.getElementById('userEmail').value;
     let workspaceId = localStorage.getItem('workspaceId');
-    let url_post = URL_BASE + '/workspaces/deleteUser';
+    let url_post = URL_BASE + '/workspaces/removeUser';
 
     try {
         const response = await fetch(url_post, {
@@ -160,26 +160,16 @@ async function createWorkspace() {
 }
 
 async function addNoteToWorkspace() {
-    let data = {
-        note: {
-          id: 0,
-          title: Document.getElementById('titleNote').value,
-          content: Document.getElementById('noteText').value
-        },
-        workspace: {
-          id: workspaceId,
-          name: workspaceName,
-          creator: {},
-          list_users: [
-            "string"
-          ],
-          "list_notes": [
-            "string"
-          ]
-        }
-      }
-    
-    let url_post = URL_BASE + '/workspaces/addNote'
+
+    titleNote = document.getElementById('titleNote').value;
+    noteText = document.getElementById('noteText').value;
+    w_id = localStorage.getItem('workspaceId');
+
+    console.log(titleNote);
+    console.log(noteText);
+    console.log(w_id);
+
+    let url_post = URL_BASE + '/workspace/createNote'
 
     try {
         const response = await fetch(url_post, {
@@ -187,21 +177,38 @@ async function addNoteToWorkspace() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify({
+                note: {
+                  id: 0,
+                  title: titleNote,
+                  content: noteText,
+                },
+                workspace: {
+                  id: w_id,
+                  name: "name",
+                  creator: {},
+                  list_users: [
+                    "string"
+                  ],
+                  "list_notes": [
+                    "string"
+                  ]
+                }
+              })
         });
-        const workspace = await response.json();
-        document.getElementById('workspace-content').textContent = workspace.message;
+        alert("Nota agregada exitosamente");
     } catch (error) {
         console.error('Error:', error);
 }
 }
 
-async function deleteNoteFromWorkspace() {
+async function deleteNoteFromWorkspace(noteId, noteTitle) {
 
-    let noteId = localStorage.getItem('noteId');
     let workspaceId = localStorage.getItem('workspaceId');
-    let url_post = URL_BASE + '/workspaces/deleteNote';
+    let url_post = URL_BASE + '/workspace/deleteNote';
+    let sure = confirm("¿Estás seguro de que deseas eliminar esta nota?");
 
+    if(sure){
     try {
         const response = await fetch(url_post, {
             method: 'DELETE',
@@ -211,28 +218,27 @@ async function deleteNoteFromWorkspace() {
             body: JSON.stringify({
                 note: {
                     id: noteId,
-                    title: "string",
+                    title: noteTitle,
                     content: "string"
                   },
                 workspace: {
                   id: workspaceId,
-                  name: workspaceName,
+                  name: "",
                   creator: {},
                   list_users: [],
                   list_notes: []
                 }
               })
         });
-        const workspace = await response.json();
-        document.getElementById('workspace-content').textContent = workspace.message;
+        alert("Nota eliminada exitosamente");
     } catch (error) {
         console.error('Error:', error);
+    }
     }
 
 }
 
-async function viewNotes(event){
-        event.preventDefault();
+async function viewNotes(){
         let url_post = URL_BASE + '/workspace/viewNotes';
         
         let workspaceId = localStorage.getItem('workspaceId');
@@ -254,25 +260,49 @@ async function viewNotes(event){
             })
         });
         data = await response.json();
+        console.log(data);
 
         let table = "<table>";
-        table += "<tr><th>Titulo</th><th>Nota</th><th>Editar</th><th>eliminar</th></tr>";
+        table += "<tr><th>Titulo</th><th>Editar</th><th>eliminar</th></tr>";
 
         data.forEach(note => {
-            table += "<tr><td>" + note.title + "</td><td>" + note.content + "</td><td><button onclick='editNote()'>Editar</button></td><td><button onclick='deleteNotefromWorkspace()'>Eliminar</button></td></tr>";
+            table += "<tr><td>" + note.title + "</td><td><button onclick='editNoteForm("+ note.id + ", `" + note.title + "` )'>Editar</button></td><td><button onclick='deleteNoteFromWorkspace("+ note.id + ", `" + note.title + "` )'>Eliminar</button></td></tr>";
         });
         table += "</table>";
 
-        document.getElementById('workspace-content').innerHTML = table;
+        document.getElementById('notes-content').innerHTML = table;
 
 }
 
-async function editNote() {
+async function editNoteForm(noteId, noteTitle){
+
+    let request = await fetch(URL_BASE + '/workspace/viewNote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            id: noteId,
+            title: noteTitle,
+            content: ""
+        }
+        )});
+
+    let note = await request.json();
+
+    let userOptions = "<label for='noteText'>Editar Nota:</label><br>";
+    userOptions += "<textarea id='titleNote' ></textarea><br>";
+    userOptions += "<textarea id='noteText' ></textarea><br>";
+    userOptions += "<button id='addNoteBtn' onclick='editNote("+ note.id + ", `" + note.title + "` )'>Agregar Nota</button></div>";
+
+    document.getElementById('notes-content').innerHTML = userOptions;
+    document.getElementById('titleNote').value = noteTitle;
+    document.getElementById('noteText').value = note.content;
+}
+
+async function editNote(noteId, noteTitle) {
     let newTitle = document.getElementById('titleNote').value;
     let newContent = document.getElementById('noteText').value;
-    let noteId = localStorage.getItem('noteId');
     let workspaceId = localStorage.getItem('workspaceId');
-    let url_post = URL_BASE + '/workspaces/editNote';
+    let url_post = URL_BASE + '/workspace/editNote';
 
     try {
         const response = await fetch(url_post, {
@@ -283,25 +313,24 @@ async function editNote() {
             body: JSON.stringify({
                 workspace: {
                   id: workspaceId,
-                  name: workspaceName,
+                  name: "",
                   creator: {},
                   list_users: [],
                   list_notes: []
                 },
                 note: {
                     id: noteId,
-                    title: newTitle,
-                    content: newContent
+                    title: noteTitle,
+                    content: ""
                   },
-                  note: {
+                new_note: {
                     id: noteId,
                     title: newTitle,
                     content: newContent
-                  }
+                }
               })
         });
-        const workspace = await response.json();
-        document.getElementById('workspace-content').textContent = workspace.message;
+        alert("Nota editada exitosamente");
     }
     catch (error) {
         console.error('Error:', error);
@@ -309,9 +338,8 @@ async function editNote() {
 
 }
 
- async function viewWorkspaces(event){
-    event.preventDefault();
-    let url_post = URL_BASE + '/viewWorkspaces';
+ async function viewWorkspaces(){
+    let url_post = URL_BASE + '/user/viewWorkspaces';
 
     let userId = localStorage.getItem('userId');
     let userName = localStorage.getItem('userName');
@@ -329,15 +357,53 @@ async function editNote() {
         })
     });
     data = await response.json();
+
+    console.log(data);
+
     let table = "<table>";
     table += "<tr><th>Workspace</th><th>acceder</th></tr>";
 
     data.forEach(workspace => {
-        table += "<tr><td>" + workspace.name + "</td><td><button onclick='viewNotes'>Acceder</button></td></tr>";
+        table += "<tr><td>" + workspace.name + "</td><td><button onclick='accessworkspace("+ workspace.id +")'>Acceder</button></td></tr>";
     });
     table += "</table>";
 
     document.getElementById('workspace-content').innerHTML = table;
 
  }
-   
+  async function accessworkspace(id){
+    localStorage.setItem('workspaceId', id);
+    
+           workspaceOptions = "<div class='option1'>";
+           workspaceOptions += "<button id='administrateUsers' onclick='manageUsers()'>Administrar Usuarios</button>"; 
+           workspaceOptions += "<button id='administrateNotes' onclick='manageNotes()'>ver Notas</button></div>";
+              document.getElementById('workspace-content').innerHTML = workspaceOptions;   
+  }
+
+  async function manageUsers(){ // TODO : implement this function
+    let userOptions = "<div class='option1'>";
+    userOptions += "<label for='userEmail'>Agregar Usuario (Correo):</label>";
+    userOptions += "<input type='email' id='userEmail' placeholder='Correo del usuario'>";
+    userOptions += "<button id='addUserBtn' onclick='addUserToWorkspace()'>Agregar Usuario</button> </div>";
+    userOptions += "<div class='option2'>";
+    userOptions += "<label for='userEmail'>Eliminar Usuario (Correo):</label>";
+    userOptions += "<input type='email' id='userEmail' placeholder='Correo del usuario'>";
+    userOptions += "<button id='deleteUserBtn' onclick='deleteUserfromWorkspace()'>Eliminar Usuario</button> </div>";
+
+    document.getElementById('workspace-content').innerHTML = userOptions;
+}
+
+async function manageNotes(){ 
+    let noteOptions = "<div id ='notes-content'>";
+    noteOptions += "<button id='addNoteBtn' onclick='addnote()'>Agregar Nota</button><br>";
+    noteOptions += "<button id='viewNotesBtn' onclick='viewNotes()'>Ver Notas</button></div>";
+    noteOptions += "</div>";
+
+    document.getElementById('workspace-content').innerHTML = noteOptions;
+
+}
+
+ async function logout(){
+    localStorage.clear();
+    window.location.href =  'http://127.0.0.1:8000/login';
+ }

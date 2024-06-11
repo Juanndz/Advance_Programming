@@ -25,7 +25,7 @@ app.add_middleware(
 @app.post("/login")
 def login(user: User):
     """this service is used to login the user"""
-    return User.login(user.email, user.password)
+    return User.login(user.name, user.email, user.password)
 
 
 @app.post("/register")
