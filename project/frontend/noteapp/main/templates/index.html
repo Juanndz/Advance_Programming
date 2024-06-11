@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notas - Inicia Sesión</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
     <script src="{% static 'scripts.js' %}"></script>
 </head>
 <body>
@@ -20,10 +20,12 @@
                 <label for="password">Contraseña:</label>
                 <input type="password" id="password" name="password" required>
 
-                <button type="submit">Iniciar Sesión</button>
+                <button type="submit" onclick="login()">Iniciar Sesión</button>
             </form>
-            <p>¿No tienes una cuenta? <a href="#" id="register-link">Regístrate aquí</a></p>
+            <p>¿No tienes una cuenta? <a href="register" id="register-link">Regístrate aquí</a></p>
         </div>
     </div>
+
+    
 </body>
 </html>
