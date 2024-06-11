@@ -13,7 +13,6 @@ document.getElementById('register-form').addEventListener('submit', function(eve
         return;
     }
 
-    // Aquí iría la lógica para registrar al usuario
     let url_post = URL_BASE + '/register';
 
     try {

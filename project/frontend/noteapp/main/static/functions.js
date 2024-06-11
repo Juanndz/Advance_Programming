@@ -1,8 +1,26 @@
 /* author : Juan Zárate */
 /* author : Angel Diaz */
 
-let URL_BASE = "http://localhost:8080"
+let URL_BASE = "http://localhost:8080";
 
+async function signOff() {
+    try {
+        const response = await fetch(URL_BASE + '/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
+        console.log(data);
+        document.getElementById('logout-link').addEventListener('click', function(event) {
+            event.preventDefault();
+            window.location.href = 'index.html'; // Redirect to the login page
+        });
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
 // Create a new workspace and at the time add a user to it and add a note
 async function createWorkspacebtn(){
     let crateworkspaceform = "<div class='option1'>";
