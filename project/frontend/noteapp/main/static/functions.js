@@ -112,8 +112,8 @@ async function createWorkspace() {
                     }
                   })
             });
-            const result = await response.json();
-            document.getElementById('result').textContent = result.message;
+            const workspace = await response.json();
+            document.getElementById('workspace-content').textContent = workspace.message;
         } catch (error) {
             console.error('Error:', error);
         }
@@ -149,8 +149,8 @@ async function addNoteToWorkspace() {
             },
             body: JSON.stringify(data)
         });
-        const result = await response.json();
-        document.getElementById('result').textContent = result.message;
+        const workspace = await response.json();
+        document.getElementById('workspace-content').textContent = workspace.message;
     } catch (error) {
         console.error('Error:', error);
 }
