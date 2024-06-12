@@ -6,10 +6,10 @@ let URL_BASE = "http://localhost:8080";
 
 // Create a new workspace and at the time add a user to it and add a note
 async function createWorkspaceForm(){
-    let crateworkspaceform = "<div class='option1'>";
-    crateworkspaceform += "<label for='workspaceName'>Nombre del Workspace:</label>";
-    crateworkspaceform += "<input type='text' id='workspaceName' placeholder='Nombre del workspace'>";
-    crateworkspaceform += "<button id='createWorkspaceBtn' onclick='createWorkspace()'>Crear Workspace</button></div>";
+
+    let crateworkspaceform = "<label for='workspaceName'>Nombre del Workspace:</label>";
+    crateworkspaceform += "<input type='text' id='workspaceName' placeholder='Nombre del workspace'><br>";
+    crateworkspaceform += "<button id='createWorkspaceBtn' onclick='createWorkspace()'>Crear Workspace</button>";
 
     document.getElementById('workspace-content').innerHTML = crateworkspaceform;
 
@@ -71,15 +71,12 @@ async function createWorkspace() {
     }
 
     async function addnote() {
-        let userOptions = "<div class='option1'>";
-                /*userOptions += "<label for='userEmail'>Agregar Usuario (Correo):</label>";
-                userOptions += "<input type='email' id='userEmail' placeholder='Correo del usuario'>";
-                userOptions += "<button id='addUserBtn' onclick='addUserToWorkspace()'>Agregar Usuario</button> </div>";
-                userOptions += "<div class='option2'>";*/
-                userOptions += "<label for='noteText'>Agregar Nota:</label>";
-                userOptions += "<textarea id='titleNote' placeholder='Escribe el título de tu nota'></textarea>";
-                userOptions += "<textarea id='noteText' placeholder='Escribe tu nota aquí'></textarea>";
-                userOptions += "<button id='addNoteBtn' onclick='addNoteToWorkspace()'>Agregar Nota</button></div>";
+                let userOptions = "<label for='noteText'>Agregar Nota:</label><br><br>";
+                userOptions += "<label for='noteText'>Titulo:</label><br>"
+                userOptions += "<textarea id='titleNote' placeholder='Escribe el título de tu nota'></textarea><br>";
+                userOptions += "<label for='noteText'>Contenido:</label><br>"
+                userOptions += "<textarea id='noteText' placeholder='Escribe tu nota aquí'></textarea><br>";
+                userOptions += "<button id='addNoteBtn' onclick='addNoteToWorkspace()'>Agregar Nota</button>";
 
                 document.getElementById('notes-content').innerHTML = userOptions;
     }
@@ -303,9 +300,11 @@ async function editNoteForm(noteId, noteTitle){
     let note = await request.json();
 
     let userOptions = "<label for='noteText'>Editar Nota:</label><br>";
+    userOptions += "<label for='noteText'>Titulo:</label><br>"
     userOptions += "<textarea id='titleNote' ></textarea><br>";
-    userOptions += "<textarea id='noteText' ></textarea><br>";
-    userOptions += "<button id='addNoteBtn' onclick='editNote("+ note.id + ", `" + note.title + "` )'>Agregar Nota</button></div>";
+    userOptions += "<label for='noteText'>Contenido:</label><br>"
+    userOptions += "<textarea id='noteText' style='width: 250px; height: 300px'></textarea><br>";
+    userOptions += "<button id='addNoteBtn' onclick='editNote("+ note.id + ", `" + note.title + "` )'>Editar Nota</button></div>";
 
     document.getElementById('notes-content').innerHTML = userOptions;
     document.getElementById('titleNote').value = noteTitle;
@@ -373,8 +372,6 @@ async function editNote(noteId, noteTitle) {
     });
     data = await response.json();
 
-    console.log(data);
-
     if(data != {}){
     let table = "<table>";
     table += "<tr><th>Workspace</th><th>acceder</th><th>eliminar</th></tr>";
@@ -402,19 +399,18 @@ async function editNote(noteId, noteTitle) {
 
   async function manageUsers(){ // TODO : implement this function
     let userOptions = "<div class='option1'>";
-    userOptions += "<button id='addUserBtn' onclick='addUserform()'>Agregar Usuario</button><br>";
+    userOptions += "<button id='addUserBtn' onclick='addUserform()'>Agregar Usuario</button>";
     userOptions += "<button id='viewUsersBtn' onclick='viewUsers()'>Ver Usuarios</button></div>";
 
     document.getElementById('workspace-content').innerHTML = userOptions;
 }
 
 async function addUserform(){
-    let userOptions = "<div class='option1'>";
-    userOptions += "<label for='userl'>Id Usuario:</label><br>";
+    let userOptions = "<label for='userl'>Id Usuario:</label><br>";
     userOptions += "<input type='number' id='userid' placeholder='id del usuario'><br><br>";
     userOptions += "<label for='username'>Nombre del Usuario:</label><br>";
     userOptions += "<input type='text' id='username' placeholder='Nombre del usuario'><br><br>";
-    userOptions += "<button id='addUserBtn' onclick='addUserToWorkspace()'>Agregar Usuario</button></div>";
+    userOptions += "<button id='addUserBtn' onclick='addUserToWorkspace()'>Agregar Usuario</button>";
     document.getElementById('workspace-content').innerHTML = userOptions;
 
 
@@ -458,7 +454,7 @@ async function viewUsers(){
 
 async function manageNotes(){ 
     let noteOptions = "<div id ='notes-content'>";
-    noteOptions += "<button id='addNoteBtn' onclick='addnote()'>Agregar Nota</button><br>";
+    noteOptions += "<button id='addNoteBtn' onclick='addnote()'>Agregar Nota</button>";
     noteOptions += "<button id='viewNotesBtn' onclick='viewNotes()'>Ver Notas</button></div>";
     noteOptions += "</div>";
 
